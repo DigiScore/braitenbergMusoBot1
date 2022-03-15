@@ -22,6 +22,7 @@ class BBBot1:
                                           input=True,
                                           frames_per_buffer=self.CHUNK)
 
+        # todo - replace with threading once we get the audio engine working
         self.running = True
 
 
@@ -31,10 +32,12 @@ class BBBot1:
             data = np.frombuffer(self.stream.read(self.CHUNK,
                                                   exception_on_overflow=False),
                                  dtype=np.int16)
+
+            # grab the RMS for left and right channels
             peakLeft = np.average(np.abs(data[0])) * 2
             peakRight = np.average(np.abs(data[1])) * 2
 
-            # do stuff with this data
+            # change motor speed for each wheel depending on RMS
             if peakLeft > 2000:
                 bars = "#" * int(50 * peakLeft / 2 ** 16)
                 print("%05d %s" % (peakLeft, bars))
