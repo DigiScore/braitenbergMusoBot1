@@ -2,13 +2,12 @@
 import numpy as np
 import pyaudio
 
-
 class BBBot1:
     def __init__(self, robot=False):
         # own the robot
         self.robot = robot
         if self.robot:
-            from jetbot import Robot
+            from robot/robot import Robot
             self.jetbot = Robot()
 
         # set up mic listening funcs
@@ -25,7 +24,6 @@ class BBBot1:
         # todo - replace with threading once we get the audio engine working
         self.running = True
 
-
     def main(self):
         while self.running:
             # set up listening stream
@@ -41,12 +39,12 @@ class BBBot1:
             if peakLeft > 2000:
                 bars = "#" * int(50 * peakLeft / 2 ** 16)
                 print("%05d %s" % (peakLeft, bars))
-                left_speed = peakLeft / 10000
+                right_speed = peakLeft / 10000
 
             if peakRight > 2000:
                 bars = "=" * int(50 * peakRight / 2 ** 16)
                 print("%05d %s" % (peakRight, bars))
-                right_speed = peakRight / 10000
+                left_speed = peakRight / 10000
 
             else:
                 left_speed = 0
