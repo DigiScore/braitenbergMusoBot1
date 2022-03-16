@@ -7,8 +7,8 @@ class BBBot1:
         # own the robot
         self.robot = robot
         if self.robot:
-            from robot/robot import Robot
-            self.jetbot = Robot()
+            from robot import robot
+            self.jetbot = robot.Robot()
 
         # set up mic listening funcs
         running = True
