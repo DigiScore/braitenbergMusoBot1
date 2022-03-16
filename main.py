@@ -56,5 +56,5 @@ class BBBot1:
 
 
 if __name__ == "__main__":
-    bot = BBBot1(robot = False)
+    bot = BBBot1(robot = True)
     bot.main()
