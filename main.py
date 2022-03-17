@@ -5,10 +5,10 @@ from glob import glob
 
 class BBBot1:
     def __init__(self, robot=False):
-        # own the jetbot
+        # own the robot
         self.robot = robot
         if self.robot:
-            from jetbot import robot
+            from robot import robot
             self.jetbot = robot.Robot()
 
         # set up mic listening funcs
@@ -56,7 +56,7 @@ class BBBot1:
                 left_speed = 0
                 right_speed = 0
 
-            # send the command to the jetbot wheels
+            # send the command to the robot wheels
             if self.robot:
                 self.jetbot.set_motors(left_speed, right_speed)
 
