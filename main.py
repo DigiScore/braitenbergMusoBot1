@@ -2,6 +2,17 @@
 import numpy as np
 import pyaudio
 from glob import glob
+from queue import Queue
+from threading import Thread
+
+class Audioplayer:
+    def __init__(self, queueName):
+        print(id)
+        self.audioLib = glob("audio/*.wav")
+
+    def makeSound(self):
+        """a seperate thread """
+        pass
 
 class BBBot1:
     def __init__(self, robot=False):
@@ -22,11 +33,17 @@ class BBBot1:
                                           input=True,
                                           frames_per_buffer=self.CHUNK)
 
-        # set up audio library
-        self.audioLib = glob("audio/*.wav")
+        # set up audio functions
+        self.leftAudioQ = Queue()
+        self.rightAudioQ = Queue()
+        self.leftAudioBot = Audioplayer(self.leftAudioQ)
+        self.rightAudioBot = Audioplayer(self.rightAudioQ)
+        tLeft = Thread(target=self.leftAudioBot.makeSound)
+        tRight = Thread(target=self.rightAudioBot.makeSound)
+        tLeft.start()
+        tRight.start()
 
         # set the ball running
-        # todo - replace with threading once we get the audio engine working
         self.running = True
 
     def main(self):
@@ -45,12 +62,16 @@ class BBBot1:
                 bars = "#" * int(100 * peakLeft / 2 ** 16)
                 print("%05d %s" % (peakLeft, bars))
                 right_speed = round(peakLeft / 10000, 1)
+                # add to Left wheel audio Queue
+                self.leftAudioQ.put(right_speed)
 
             if peakRight > 2000:
                 bars = "=" * int(100 * peakRight / 2 ** 16)
                 print("%05d %s" % (peakRight, bars))
                 # round number to 1dp to avoid lots of
                 left_speed = round(peakRight / 10000, 1)
+                # add to Right wheel audio Queue
+                self.rightAudioQ.put(left_speed)
 
             else:
                 left_speed = 0
@@ -60,8 +81,7 @@ class BBBot1:
             if self.robot:
                 self.jetbot.set_motors(left_speed, right_speed)
 
-    def makeSound(self):
-        pass
+
 
 if __name__ == "__main__":
     bot = BBBot1(robot = True)
