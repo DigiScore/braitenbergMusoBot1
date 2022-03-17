@@ -13,6 +13,9 @@ class Audioplayer:
     def makeSound(self):
         """a seperate thread """
         pass
+    # if queuename > 0:
+    # make sound
+    # BUT replace with FIFO items in queuename
 
 class BBBot1:
     def __init__(self, robot=False):
