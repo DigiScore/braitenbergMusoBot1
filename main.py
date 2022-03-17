@@ -1,13 +1,14 @@
 # get python libraries
 import numpy as np
 import pyaudio
+from glob import glob
 
 class BBBot1:
     def __init__(self, robot=False):
-        # own the robot
+        # own the jetbot
         self.robot = robot
         if self.robot:
-            from robot import robot
+            from jetbot import robot
             self.jetbot = robot.Robot()
 
         # set up mic listening funcs
@@ -21,6 +22,10 @@ class BBBot1:
                                           input=True,
                                           frames_per_buffer=self.CHUNK)
 
+        # set up audio library
+        self.audioLib = glob("audio/*.wav")
+
+        # set the ball running
         # todo - replace with threading once we get the audio engine working
         self.running = True
 
@@ -37,23 +42,26 @@ class BBBot1:
 
             # change motor speed for each wheel depending on RMS
             if peakLeft > 2000:
-                bars = "#" * int(50 * peakLeft / 2 ** 16)
+                bars = "#" * int(100 * peakLeft / 2 ** 16)
                 print("%05d %s" % (peakLeft, bars))
-                right_speed = peakLeft / 10000
+                right_speed = round(peakLeft / 10000, 1)
 
             if peakRight > 2000:
-                bars = "=" * int(50 * peakRight / 2 ** 16)
+                bars = "=" * int(100 * peakRight / 2 ** 16)
                 print("%05d %s" % (peakRight, bars))
-                left_speed = peakRight / 10000
+                # round number to 1dp to avoid lots of
+                left_speed = round(peakRight / 10000, 1)
 
             else:
                 left_speed = 0
                 right_speed = 0
 
-            # send the command to the robot wheels
+            # send the command to the jetbot wheels
             if self.robot:
                 self.jetbot.set_motors(left_speed, right_speed)
 
+    def makeSound(self):
+        pass
 
 if __name__ == "__main__":
     bot = BBBot1(robot = True)
