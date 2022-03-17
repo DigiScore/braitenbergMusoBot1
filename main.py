@@ -4,16 +4,31 @@ import pyaudio
 from glob import glob
 from queue import Queue
 from threading import Thread
+from random import randrange
+import simpleaudio
 
 class Audioplayer:
-    def __init__(self, queueName):
+    def __init__(self, queueName, wheel):
         print(id)
         self.audioLib = glob("audio/*.wav")
+        self.numAudioFiles = len(self.audioLib)
         # own queue
         self.audioQueue = queueName
 
     def makeSound(self):
         if self.audioQueue > 0:
+            if self.wheel == 0:
+                rndSound = randrange(0, self.numAudioFiles / 2)
+            else:
+                rndSound = randrange(self.numAudioFiles/2, self.numAudioFiles)
+
+            audiofile = self.audioLib[rndSound]
+            player = simpleaudio.WaveObject(audiofile)
+
+            if player.is_playing():
+                player.stop()
+
+            player.play()
 
 
         pass
@@ -25,6 +40,7 @@ class BBBot1:
     def __init__(self, robot=False):
         # own the robot
         self.robot = robot
+        # todo - delete this once beta tested
         if self.robot:
             from robot import robot
             self.jetbot = robot.Robot()
@@ -42,11 +58,11 @@ class BBBot1:
 
         # set up audio functions
         self.leftAudioQ = Queue()
-        self.leftAudioBot = Audioplayer(self.leftAudioQ)
+        self.leftAudioBot = Audioplayer(self.leftAudioQ, 0)
         tLeft = Thread(target=self.leftAudioBot.makeSound)
 
         self.rightAudioQ = Queue()
-        self.rightAudioBot = Audioplayer(self.rightAudioQ)
+        self.rightAudioBot = Audioplayer(self.rightAudioQ, 1)
         tRight = Thread(target=self.rightAudioBot.makeSound)
 
         # start threads
@@ -93,5 +109,5 @@ class BBBot1:
 
 
 if __name__ == "__main__":
-    bot = BBBot1(robot = True)
+    bot = BBBot1(robot = False)
     bot.main()
