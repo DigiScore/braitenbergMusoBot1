@@ -9,9 +9,13 @@ class Audioplayer:
     def __init__(self, queueName):
         print(id)
         self.audioLib = glob("audio/*.wav")
+        # own queue
+        self.audioQueue = queueName
 
     def makeSound(self):
-        """a seperate thread """
+        if self.audioQueue > 0:
+
+
         pass
     # if queuename > 0:
     # make sound
@@ -38,11 +42,14 @@ class BBBot1:
 
         # set up audio functions
         self.leftAudioQ = Queue()
-        self.rightAudioQ = Queue()
         self.leftAudioBot = Audioplayer(self.leftAudioQ)
-        self.rightAudioBot = Audioplayer(self.rightAudioQ)
         tLeft = Thread(target=self.leftAudioBot.makeSound)
+
+        self.rightAudioQ = Queue()
+        self.rightAudioBot = Audioplayer(self.rightAudioQ)
         tRight = Thread(target=self.rightAudioBot.makeSound)
+
+        # start threads
         tLeft.start()
         tRight.start()
 
@@ -83,7 +90,6 @@ class BBBot1:
             # send the command to the robot wheels
             if self.robot:
                 self.jetbot.set_motors(left_speed, right_speed)
-
 
 
 if __name__ == "__main__":
