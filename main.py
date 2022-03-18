@@ -6,35 +6,38 @@ from queue import Queue
 from threading import Thread
 from random import randrange
 import simpleaudio
+from time import sleep
 
 class Audioplayer:
     def __init__(self, queueName, wheel):
-        print(id)
+        print(f'Audioplayer {wheel} is [a]live')
+        self.wheel = wheel
         self.audioLib = glob("audio/*.wav")
         self.numAudioFiles = len(self.audioLib)
         # own queue
         self.audioQueue = queueName
+        self.queueLock = False
+        # start thread
+        thd = Thread(target=self.makeSound)
+        thd.start()
 
     def makeSound(self):
-        if self.audioQueue > 0:
-            if self.wheel == 0:
-                rndSound = randrange(0, self.numAudioFiles / 2)
+        while True:
+            if len(self.audioQueue) > 0:
+                _dummy = self.audioQueue.pop(0)
+                if self.wheel == 0:
+                    rndSound = randrange(0, self.numAudioFiles / 2)
+                else:
+                    rndSound = randrange(self.numAudioFiles/2, self.numAudioFiles)
+                if self.queueLock:
+                    playing.stop()
+                # make new audio obj
+                audiofile = self.audioLib[rndSound]
+                player = simpleaudio.WaveObject.from_wave_file(audiofile)
+                playing = player.play()
+                self.queueLock = True
             else:
-                rndSound = randrange(self.numAudioFiles/2, self.numAudioFiles)
-
-            audiofile = self.audioLib[rndSound]
-            player = simpleaudio.WaveObject(audiofile)
-
-            if player.is_playing():
-                player.stop()
-
-            player.play()
-
-
-        pass
-    # if queuename > 0:
-    # make sound
-    # BUT replace with FIFO items in queuename
+                sleep(0.1)
 
 class BBBot1:
     def __init__(self, robot=False):
@@ -57,17 +60,11 @@ class BBBot1:
                                           frames_per_buffer=self.CHUNK)
 
         # set up audio functions
-        self.leftAudioQ = Queue()
+        self.leftAudioQ = [] #Queue(maxsize=1)
         self.leftAudioBot = Audioplayer(self.leftAudioQ, 0)
-        tLeft = Thread(target=self.leftAudioBot.makeSound)
 
-        self.rightAudioQ = Queue()
+        self.rightAudioQ = [] #Queue(maxsize=1)
         self.rightAudioBot = Audioplayer(self.rightAudioQ, 1)
-        tRight = Thread(target=self.rightAudioBot.makeSound)
-
-        # start threads
-        tLeft.start()
-        tRight.start()
 
         # set the ball running
         self.running = True
@@ -85,19 +82,19 @@ class BBBot1:
 
             # change motor speed for each wheel depending on RMS
             if peakLeft > 2000:
-                bars = "#" * int(100 * peakLeft / 2 ** 16)
+                bars = "#" * int(50 * peakLeft / 2 ** 16)
                 print("%05d %s" % (peakLeft, bars))
                 right_speed = round(peakLeft / 10000, 1)
                 # add to Left wheel audio Queue
-                self.leftAudioQ.put(right_speed)
+                self.leftAudioQ.append(right_speed)
 
             if peakRight > 2000:
-                bars = "=" * int(100 * peakRight / 2 ** 16)
+                bars = "=" * int(50 * peakRight / 2 ** 16)
                 print("%05d %s" % (peakRight, bars))
                 # round number to 1dp to avoid lots of
                 left_speed = round(peakRight / 10000, 1)
                 # add to Right wheel audio Queue
-                self.rightAudioQ.put(left_speed)
+                self.rightAudioQ.append(left_speed)
 
             else:
                 left_speed = 0
