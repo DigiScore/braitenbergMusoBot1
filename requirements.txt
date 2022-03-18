@@ -1,0 +1,5 @@
+numpy~=1.22.1
+# tensorflow~=2.7.0
+pyaudio~=0.2.11
+# pydub~=0.25.1
+simpleaudio~=1.0.4
