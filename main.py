@@ -44,6 +44,7 @@ class Audioplayer:
 
 class BBBot1:
     def __init__(self, robot=False):
+        
         # own the robot
         self.robot = robot
         if self.robot:         # todo - delete this once beta tested
@@ -71,11 +72,12 @@ class BBBot1:
 
     def scale (self, x):
         y1 = 0
-        y2 = 1
+        y2 = 0.3
         return y1 + (y2 - y1)*x / 45000 
 
 
     def main(self):
+        
         while self.running:
             # set up listening stream
             data = np.frombuffer(self.stream.read(self.CHUNK, exception_on_overflow=False), dtype=np.int16)
@@ -91,13 +93,13 @@ class BBBot1:
                     
                     bars = "#" * int(50 * peakLeft / 2 ** 16)
                     print("%05d  %s" % (peakLeft, bars))
-                    right_speed = self.scale(peakLeft)
+                    right_speed = 0.4 + self.scale(peakLeft)
                     self.leftAudioQ.append(right_speed)
 
                     bars = "=" * int(50 * peakRight / 2 ** 16)
                     print("%05d  %s" % (peakRight, bars))
                     # round number to 1dp to avoid lots of
-                    left_speed = 0.5*self.scale(peakRight)
+                    left_speed = 0.4 + 0.5*self.scale(peakRight)
                     # add to Right wheel audio Queue
                     self.rightAudioQ.append(left_speed)
 
@@ -106,13 +108,13 @@ class BBBot1:
                     bars = "=" * int(50 * peakRight / 2 ** 16)
                     print("%05d  %s" % (peakRight, bars))
                     # round number to 1dp to avoid lots of
-                    left_speed = self.scale(peakRight)
+                    left_speed = 0.4 + self.scale(peakRight)
                     # add to Right wheel audio Queue
                     self.rightAudioQ.append(left_speed)
                     
                     bars = "#" * int(50 * peakLeft / 2 ** 16)
                     print("%05d  %s" % (peakLeft, bars))
-                    right_speed = 0.5*self.scale(peakLeft)
+                    right_speed = 0.4 + 0.5*self.scale(peakLeft)
                     self.leftAudioQ.append(right_speed)
 
                 else:
@@ -120,7 +122,7 @@ class BBBot1:
                         #2000
                         bars = "#" * int(50 * peakLeft / 2 ** 16)
                         print("%05d  %s" % (peakLeft, bars))
-                        right_speed = self.scale(peakLeft)
+                        right_speed = 0.4 + self.scale(peakLeft)
                         #round(peakLeft / 10000, 1)
                         # add to Left wheel audio Queue
                         self.leftAudioQ.append(right_speed)
@@ -129,7 +131,7 @@ class BBBot1:
                         bars = "=" * int(50 * peakRight / 2 ** 16)
                         print("%05d  %s" % (peakRight, bars))
                         # round number to 1dp to avoid lots of
-                        left_speed = self.scale(peakRight)
+                        left_speed = 0.4 + self.scale(peakRight)
                         # add to Right wheel audio Queue
                         self.rightAudioQ.append(left_speed)
             else:
