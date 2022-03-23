@@ -102,5 +102,5 @@ class BBBot1:
                 self.jetbot.set_motors(left_speed, right_speed)
 
 if __name__ == "__main__":
-    bot = BBBot1(robot = False)
+    bot = BBBot1(robot = True)
     bot.main()
