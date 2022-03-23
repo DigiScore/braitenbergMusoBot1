@@ -71,7 +71,7 @@ class BBBot1:
     def scale (self, x):
         y1 = 0
         y2 = 1
-        return y1 + (y2 - y1)*x / 64534 
+        return y1 + (y2 - y1)*x / 30000 
 
 
     def main(self):
