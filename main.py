@@ -68,7 +68,7 @@ class BBBot1:
         self.running = True
 
 
-    def scale (x, x1, x2, y1, y2):
+    def scale (self, x, x1, x2, y1, y2):
         return y1 + (y2 - y1)*(x - x1) / (x2 - x1) 
 
 
