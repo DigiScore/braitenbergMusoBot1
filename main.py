@@ -92,6 +92,7 @@ class BBBot1:
                     bars = "#" * int(50 * peakLeft / 2 ** 16)
                     print("%05d  %s" % (peakLeft, bars))
                     right_speed = 0.3
+                    left_speed = 0
                     self.leftAudioQ.append(right_speed)
 
                 if peakRight > 0:
@@ -99,6 +100,7 @@ class BBBot1:
                     print("%05d  %s" % (peakRight, bars))
                     # round number to 1dp to avoid lots of
                     left_speed = 0.3
+                    right_speed = 0
                     # add to Right wheel audio Queue
                     self.rightAudioQ.append(left_speed)
 
