@@ -67,6 +67,11 @@ class BBBot1:
         # set the ball running
         self.running = True
 
+
+    def scale (x, x1, x2, y1, y2):
+        return y1 + (y2 - y1)*(x - x1) / (x2 - x1) 
+
+
     def main(self):
         while self.running:
             # set up listening stream
@@ -81,7 +86,8 @@ class BBBot1:
                 #2000
                 bars = "#" * int(50 * peakLeft / 2 ** 16)
                 print("%05d  %s" % (peakLeft, bars))
-                right_speed = round(peakLeft / 10000, 1)
+                right_speed = scale(peakLeft, np.min(np.abs(data[0])), np.max(np.abs(data[0])), 0, 1 )
+                #round(peakLeft / 10000, 1)
                 # add to Left wheel audio Queue
                 self.leftAudioQ.append(right_speed)
 
@@ -89,7 +95,8 @@ class BBBot1:
                 bars = "=" * int(50 * peakRight / 2 ** 16)
                 print("%05d  %s" % (peakRight, bars))
                 # round number to 1dp to avoid lots of
-                left_speed = round(peakRight / 10000, 1)
+                left_speed = scale(peakRight, np.min(np.abs(data[0])), np.max(np.abs(data[0])), 0, 1 )
+                #round(peakRight / 10000, 1)
                 # add to Right wheel audio Queue
                 self.rightAudioQ.append(left_speed)
             
