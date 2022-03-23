@@ -138,7 +138,7 @@ class BBBot1:
 
             # send the command to the robot wheels
             if self.robot:
-                self.jetbot.set_motors(left_speed, right_speed)
+                self.jetbot.set_motors(right_speed, left_speed) # microphone directiongs get switched when it faces other way from robot
 
 if __name__ == "__main__":
 
