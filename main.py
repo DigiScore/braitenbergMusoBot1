@@ -5,6 +5,7 @@ from threading import Thread
 from random import randrange
 import simpleaudio
 from time import sleep
+from sys import platform
 
 class Audioplayer:
     def __init__(self, queueName, wheel):
@@ -94,7 +95,7 @@ class BBBot1:
                     self.leftAudioQ.append(right_speed)
 
                     bars = "=" * int(50 * peakRight / 2 ** 16)
-                    print("%05d  %s" % (0.5*peakRight, bars))
+                    print("%05d  %s" % (peakRight, bars))
                     # round number to 1dp to avoid lots of
                     left_speed = 0.5*self.scale(peakRight)
                     # add to Right wheel audio Queue
@@ -110,7 +111,7 @@ class BBBot1:
                     self.rightAudioQ.append(left_speed)
                     
                     bars = "#" * int(50 * peakLeft / 2 ** 16)
-                    print("%05d  %s" % (0.5*peakLeft, bars))
+                    print("%05d  %s" % (peakLeft, bars))
                     right_speed = 0.5*self.scale(peakLeft)
                     self.leftAudioQ.append(right_speed)
 
@@ -140,5 +141,13 @@ class BBBot1:
                 self.jetbot.set_motors(left_speed, right_speed)
 
 if __name__ == "__main__":
-    bot = BBBot1(robot = False)
+
+    if platform == "linux" or platform == "linux2":
+        #linux
+        bot = BBBot1(robot = True)
+    elif platform == "darwin":    # OS X
+        bot = BBBot1(robot = False)
+    else:
+        bot = BBBot1(robot = False) #Windows
+
     bot.main()
