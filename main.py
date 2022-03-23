@@ -87,20 +87,33 @@ class BBBot1:
      
             # change motor speed for each wheel depending on RMS
                 if peakLeft > peakRight:
-                    peakRight = 0
+                    
                     bars = "#" * int(50 * peakLeft / 2 ** 16)
                     print("%05d  %s" % (peakLeft, bars))
                     right_speed = self.scale(peakLeft)
-                    self.leftAudioQ.append(right_speed)                 
+                    self.leftAudioQ.append(right_speed)
+
+                    bars = "=" * int(50 * peakRight / 2 ** 16)
+                    print("%05d  %s" % (peakRight, bars))
+                    # round number to 1dp to avoid lots of
+                    left_speed = 0.5*self.scale(peakRight)
+                    # add to Right wheel audio Queue
+                    self.rightAudioQ.append(left_speed)
+
                 elif peakRight > peakLeft:
-                    peakLeft = 0
+
                     bars = "=" * int(50 * peakRight / 2 ** 16)
                     print("%05d  %s" % (peakRight, bars))
                     # round number to 1dp to avoid lots of
                     left_speed = self.scale(peakRight)
-                    #round(peakRight / 10000, 1)
                     # add to Right wheel audio Queue
                     self.rightAudioQ.append(left_speed)
+                    
+                    bars = "#" * int(50 * peakLeft / 2 ** 16)
+                    print("%05d  %s" % (peakLeft, bars))
+                    right_speed = 0.5*self.scale(peakLeft)
+                    self.leftAudioQ.append(right_speed)
+
                 else:
                     if peakLeft > 0:
                         #2000
@@ -116,8 +129,6 @@ class BBBot1:
                         print("%05d  %s" % (peakRight, bars))
                         # round number to 1dp to avoid lots of
                         left_speed = self.scale(peakRight)
-                        #round(peakRight / 10000, 1)
-                        #
                         # add to Right wheel audio Queue
                         self.rightAudioQ.append(left_speed)
             else:
