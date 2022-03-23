@@ -86,7 +86,7 @@ class BBBot1:
                 #2000
                 bars = "#" * int(50 * peakLeft / 2 ** 16)
                 print("%05d  %s" % (peakLeft, bars))
-                right_speed = scale(peakLeft, np.min(np.abs(data[0])), np.max(np.abs(data[0])), 0, 1 )
+                right_speed = self.scale(peakLeft, np.min(np.abs(data[0])), np.max(np.abs(data[0])), 0, 1 )
                 #round(peakLeft / 10000, 1)
                 # add to Left wheel audio Queue
                 self.leftAudioQ.append(right_speed)
@@ -95,7 +95,7 @@ class BBBot1:
                 bars = "=" * int(50 * peakRight / 2 ** 16)
                 print("%05d  %s" % (peakRight, bars))
                 # round number to 1dp to avoid lots of
-                left_speed = scale(peakRight, np.min(np.abs(data[0])), np.max(np.abs(data[0])), 0, 1 )
+                left_speed = self.scale(peakRight, np.min(np.abs(data[0])), np.max(np.abs(data[0])), 0, 1 )
                 #round(peakRight / 10000, 1)
                 # add to Right wheel audio Queue
                 self.rightAudioQ.append(left_speed)
