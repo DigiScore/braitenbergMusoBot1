@@ -87,53 +87,67 @@ class BBBot1:
             peakRight = np.average(np.abs(data[1])) * 2 - self.threshold
 
             if peakLeft > 0 and peakRight > 0:
-     
+                
+                if peakLeft > 0:
+                    bars = "#" * int(50 * peakLeft / 2 ** 16)
+                    print("%05d  %s" % (peakLeft, bars))
+                    right_speed = 0.3
+                    self.leftAudioQ.append(right_speed)
+
+                if peakRight > 0:
+                    bars = "=" * int(50 * peakRight / 2 ** 16)
+                    print("%05d  %s" % (peakRight, bars))
+                    # round number to 1dp to avoid lots of
+                    left_speed = 0.3
+                    # add to Right wheel audio Queue
+                    self.rightAudioQ.append(left_speed)
+
             # change motor speed for each wheel depending on RMS
-                if peakLeft > peakRight:
+                # if peakLeft > peakRight:
                     
-                    bars = "#" * int(50 * peakLeft / 2 ** 16)
-                    print("%05d  %s" % (peakLeft, bars))
-                    right_speed = 0.4 + self.scale(peakLeft)
-                    self.leftAudioQ.append(right_speed)
+                #     bars = "#" * int(50 * peakLeft / 2 ** 16)
+                #     print("%05d  %s" % (peakLeft, bars))
+                #     right_speed = 0.4 + self.scale(peakLeft)
+                #     self.leftAudioQ.append(right_speed)
 
-                    bars = "=" * int(50 * peakRight / 2 ** 16)
-                    print("%05d  %s" % (peakRight, bars))
-                    # round number to 1dp to avoid lots of
-                    left_speed = 0.4 + 0.5*self.scale(peakRight)
-                    # add to Right wheel audio Queue
-                    self.rightAudioQ.append(left_speed)
+                #     bars = "=" * int(50 * peakRight / 2 ** 16)
+                #     print("%05d  %s" % (peakRight, bars))
+                #     # round number to 1dp to avoid lots of
+                #     left_speed = 0.4 + 0.5*self.scale(peakRight)
+                #     # add to Right wheel audio Queue
+                #     self.rightAudioQ.append(left_speed)
 
-                elif peakRight > peakLeft:
+                # elif peakRight > peakLeft:
 
-                    bars = "=" * int(50 * peakRight / 2 ** 16)
-                    print("%05d  %s" % (peakRight, bars))
-                    # round number to 1dp to avoid lots of
-                    left_speed = 0.4 + self.scale(peakRight)
-                    # add to Right wheel audio Queue
-                    self.rightAudioQ.append(left_speed)
+                #     bars = "=" * int(50 * peakRight / 2 ** 16)
+                #     print("%05d  %s" % (peakRight, bars))
+                #     # round number to 1dp to avoid lots of
+                #     left_speed = 0.4 + self.scale(peakRight)
+                #     # add to Right wheel audio Queue
+                #     self.rightAudioQ.append(left_speed)
                     
-                    bars = "#" * int(50 * peakLeft / 2 ** 16)
-                    print("%05d  %s" % (peakLeft, bars))
-                    right_speed = 0.4 + 0.5*self.scale(peakLeft)
-                    self.leftAudioQ.append(right_speed)
+                #     bars = "#" * int(50 * peakLeft / 2 ** 16)
+                #     print("%05d  %s" % (peakLeft, bars))
+                #     right_speed = 0.4 + 0.5*self.scale(peakLeft)
+                #     self.leftAudioQ.append(right_speed)
 
-                else:
-                    if peakLeft > 0:
-                        #2000
-                        bars = "#" * int(50 * peakLeft / 2 ** 16)
-                        print("%05d  %s" % (peakLeft, bars))
-                        right_speed = 0.4 + self.scale(peakLeft)
-                        #round(peakLeft / 10000, 1)
-                        # add to Left wheel audio Queue
-                        self.leftAudioQ.append(right_speed)
+                # else:
+                #     if peakLeft > 0:
+                #         #2000
+                #         bars = "#" * int(50 * peakLeft / 2 ** 16)
+                #         print("%05d  %s" % (peakLeft, bars))
+                #         right_speed = 0.4 + self.scale(peakLeft)
+                #         #round(peakLeft / 10000, 1)
+                #         # add to Left wheel audio Queue
+                #         self.leftAudioQ.append(right_speed)
 
-                    if peakRight > 0:
-                        bars = "=" * int(50 * peakRight / 2 ** 16)
-                        print("%05d  %s" % (peakRight, bars))
-                        # round number to 1dp to avoid lots of
-                        left_speed = 0.4 + self.scale(peakRight)
-                        # add to Right wheel audio Queue
-                        self.rightAudioQ.append(left_speed)
+                #     if peakRight > 0:
+                #         bars = "=" * int(50 * peakRight / 2 ** 16)
+                #         print("%05d  %s" % (peakRight, bars))
+                #         # round number to 1dp to avoid lots of
+                #         left_speed = 0.4 + self.scale(peakRight)
+                #         # add to Right wheel audio Queue
+                #         self.rightAudioQ.append(left_speed)
             else:
                 left_speed = 0
                 right_speed = 0
